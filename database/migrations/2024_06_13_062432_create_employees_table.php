@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('firstname');
             $table->string('middlename')->nullable();
             $table->string('name_ext')->nullable();
-            $table->date('birthdate');
             $table->string('mobile_no');
-            $table->string('personal_email');
+            $table->string('personal_email')->nullable();
+            $table->string('company_email')->nullable();
             $table->foreignId('position_id')->constrained('positions');
             $table->foreignId('department_id')->constrained('departments');
             $table->foreignId('tenureship_id')->constrained('tenureships');

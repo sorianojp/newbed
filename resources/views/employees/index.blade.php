@@ -21,6 +21,7 @@
                         <th scope="col" class="p-2">Birthdate</th>
                         <th scope="col" class="p-2">Mobile No</th>
                         <th scope="col" class="p-2">Personal Email</th>
+                        <th scope="col" class="p-2">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,6 +34,11 @@
                             <td class="p-2">{{ $employee->birthdate }}</td>
                             <td class="p-2">{{ $employee->mobile_no }}</td>
                             <td class="p-2">{{ $employee->personal_email }}</td>
+                            <td class="p-2">
+                                <a href="{{ route('employees.createPersonalData', ['employee' => $employee]) }}">
+                                    Personal Data
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

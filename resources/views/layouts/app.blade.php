@@ -17,13 +17,7 @@
     @include('layouts.sidebar')
     @include('layouts.navigation')
     <!-- Page Content -->
-    <div class="p-4 sm:ml-64 mt-12">
-        <!-- Page Heading -->
-        @isset($header)
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ $header }}
-            </h2>
-        @endisset
+    <div class="px-4 py-6 sm:ml-64 mt-12">
         <main>
             {{ $slot }}
         </main>

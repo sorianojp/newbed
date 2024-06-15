@@ -10,7 +10,7 @@ class Employee extends Model
     use HasFactory;
 
     protected $fillable = [
-        'employee_id', 'lastname', 'firstname', 'middlename', 'name_ext', 'birthdate', 'mobile_no', 'personal_email'
+        'employee_id', 'lastname', 'firstname', 'middlename', 'name_ext', 'mobile_no', 'personal_email', 'company_email', 'position_id', 'department_id', 'tenureship_id', 'base_salary', 'start_date', 'end_date'
     ];
     public function position(): BelongsTo
     {
@@ -23,5 +23,9 @@ class Employee extends Model
     public function tenureship(): BelongsTo
     {
         return $this->belongsTo(Tenureship::class);
+    }
+    public function personalData()
+    {
+        return $this->hasOne(EmployeePersonalData::class);
     }
 }

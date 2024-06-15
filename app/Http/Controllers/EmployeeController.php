@@ -31,9 +31,9 @@ class EmployeeController extends Controller
             'firstname' => 'required',
             'middlename' => 'nullable',
             'name_ext' => 'nullable',
-            'birthdate' => 'required',
             'mobile_no' => 'required',
-            'personal_email' => 'required',
+            'personal_email' => 'nullable',
+            'company_email' => 'nullable',
             'position_id' => 'required',
             'department_id' => 'required',
             'tenureship_id' => 'required',
@@ -44,6 +44,9 @@ class EmployeeController extends Controller
         ]);
         Employee::create($request->all());
         return redirect()->route('employees.index')->with('success','Employee Registered!');
-
+    }
+    public function createPersonalData(Employee $employee): View
+    {
+        return view('employees.personalData', compact('employee'));
     }
 }
