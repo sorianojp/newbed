@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->string('employee_id');
+            $table->string('employee_id_no');
             $table->string('lastname');
             $table->string('firstname');
             $table->string('middlename')->nullable();
@@ -21,12 +21,6 @@ return new class extends Migration
             $table->string('mobile_no');
             $table->string('personal_email')->nullable();
             $table->string('company_email')->nullable();
-            $table->foreignId('position_id')->constrained('positions');
-            $table->foreignId('department_id')->constrained('departments');
-            $table->foreignId('tenureship_id')->constrained('tenureships');
-            $table->decimal('base_salary', 9, 3);
-            $table->date('start_date');
-            $table->date('end_date');
             $table->timestamps();
         });
     }

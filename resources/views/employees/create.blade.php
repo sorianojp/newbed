@@ -10,7 +10,7 @@
                 <div class="grid grid-cols-3 gap-2">
                     <div>
                         <x-label>Employee ID</x-label>
-                        <x-text-input type="text" name="employee_id" :value="old('employee_id')" placeholder="00000000000" />
+                        <x-text-input type="text" name="employee_id_no" :value="old('employee_id_no')" placeholder="00000000000" />
                     </div>
                     <div>
                         <x-label>Lastname</x-label>
@@ -44,56 +44,6 @@
                         <x-label>Company Email</x-label>
                         <x-text-input type="email" name="company_email" :value="old('company_email')"
                             placeholder="delacruzjuan@udd.edu.ph" />
-                    </div>
-                </div>
-                <div class="grid grid-cols-3 gap-2 my-2">
-                    <div>
-                        <x-label>Position</x-label>
-                        <x-text-input-select id="position_id" name="position_id">
-                            @foreach ($positions as $position)
-                                <option value="{{ $position->id }}"
-                                    {{ old('position_id') == $position->id ? 'selected' : '' }}>
-                                    {{ $position->name }}
-                                </option>
-                            @endforeach
-                        </x-text-input-select>
-                    </div>
-                    <div>
-                        <x-label>Department</x-label>
-                        <x-text-input-select id="department_id" name="department_id">
-                            @foreach ($departments as $department)
-                                <option value="{{ $department->id }}"
-                                    {{ old('department_id') == $department->id ? 'selected' : '' }}>
-                                    {{ $department->name }}
-                                </option>
-                            @endforeach
-                        </x-text-input-select>
-                    </div>
-                    <div>
-                        <x-label>Tenureship</x-label>
-                        <x-text-input-select id="tenureship_id" name="tenureship_id">
-                            @foreach ($tenureships as $tenureship)
-                                <option value="{{ $tenureship->id }}"
-                                    {{ old('tenureship_id') == $position->id ? 'selected' : '' }}>
-                                    {{ $tenureship->name }}
-                                </option>
-                            @endforeach
-                        </x-text-input-select>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 my-2">
-                    <div>
-                        <x-label>Start Date</x-label>
-                        <x-text-input type="date" name="start_date" :value="old('start_date')" placeholder="Start Date" />
-                    </div>
-                    <div>
-                        <x-label>End Date</x-label>
-                        <x-text-input type="date" name="end_date" :value="old('end_date')" placeholder="End Date" />
-                    </div>
-                    <div>
-                        <x-label>Base Salary</x-label>
-                        <x-text-input type="number" name="base_salary" :value="old('base_salary')" placeholder="0.000"
-                            min="0" step="any" />
                     </div>
                 </div>
                 <div class="flex justify-end">

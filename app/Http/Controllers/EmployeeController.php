@@ -18,35 +18,29 @@ class EmployeeController extends Controller
     }
     public function create(): View
     {
-        $positions = Position::all();
-        $departments = Department::all();
-        $tenureships = Tenureship::all();
-        return view('employees.create', compact('positions', 'departments', 'tenureships'));
+        return view('employees.create');
     }
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'employee_id' => 'required',
+            'employee_id_no' => 'required',
             'lastname' => 'required',
             'firstname' => 'required',
             'middlename' => 'nullable',
             'name_ext' => 'nullable',
             'mobile_no' => 'required',
             'personal_email' => 'nullable',
-            'company_email' => 'nullable',
-            'position_id' => 'required',
-            'department_id' => 'required',
-            'tenureship_id' => 'required',
-            'base_salary' => 'required',
-            'start_date' => 'required',
-            'end_date' => 'required',
+            'company_email' => 'nullable'
 
         ]);
         Employee::create($request->all());
         return redirect()->route('employees.index')->with('success','Employee Registered!');
     }
-    public function createPersonalData(Employee $employee): View
+    public function show(Employee $employee)
     {
-        return view('employees.personalData', compact('employee'));
+        $positions = Position::all();
+        $departments = Department::all();
+        $tenureships = Tenureship::all();
+        return view('employees.show', compact('employee', 'positions', 'departments', 'tenureships'));
     }
 }

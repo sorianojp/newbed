@@ -35,9 +35,10 @@
                             <td class="p-2">{{ $employee->mobile_no }}</td>
                             <td class="p-2">{{ $employee->personal_email }}</td>
                             <td class="p-2">
-                                <a href="{{ route('employees.createPersonalData', ['employee' => $employee]) }}">
-                                    Personal Data
+                                <a href="{{ route('employees.show', ['employee' => $employee]) }}">
+                                    Show
                                 </a>
+
                             </td>
                         </tr>
                     @endforeach

@@ -8,7 +8,8 @@ class EmployeePersonalDataController extends Controller
 {
     public function storePersonalData(Request $request, Employee $employee)
     {
+        session(['activeSection' => 'personalData']);
         $employee->personalData()->updateOrCreate([],$request->all());
-        return redirect()->route('employees.createPersonalData', $employee)->with('success','Personal Data Updated!');
+        return redirect()->route('employees.show', $employee)->with('success','Personal Data Updated!');
     }
 }
