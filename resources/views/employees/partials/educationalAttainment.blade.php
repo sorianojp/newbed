@@ -42,7 +42,7 @@
             </div>
             <div>
                 <x-label>Units Earned {{ '(if not yet graduated)' }}</x-label>
-                <x-text-input type="text" name="units" :value="old('units')" placeholder="Units" />
+                <x-text-input type="number" name="units" :value="old('units')" placeholder="Units" />
             </div>
             <div>
                 <x-label>Honor</x-label>

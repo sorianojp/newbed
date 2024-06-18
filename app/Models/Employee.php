@@ -24,4 +24,8 @@ class Employee extends Model
     {
         return $this->hasMany(EducationalAttainment::class);
     }
+    public function civilServices()
+    {
+        return $this->hasMany(CivilService::class);
+    }
 }
