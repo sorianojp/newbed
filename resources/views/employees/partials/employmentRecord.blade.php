@@ -28,7 +28,7 @@
                 <x-text-input-select id="tenureship_id" name="tenureship_id">
                     @foreach ($tenureships as $tenureship)
                         <option value="{{ $tenureship->id }}"
-                            {{ old('tenureship_id') == $position->id ? 'selected' : '' }}>
+                            {{ old('tenureship_id') == $tenureship->id ? 'selected' : '' }}>
                             {{ $tenureship->name }}
                         </option>
                     @endforeach

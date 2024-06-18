@@ -20,4 +20,8 @@ class Employee extends Model
     {
         return $this->hasMany(EmploymentRecord::class);
     }
+    public function educationalAttainments()
+    {
+        return $this->hasMany(EducationalAttainment::class);
+    }
 }

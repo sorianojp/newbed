@@ -14,6 +14,10 @@
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 Employment Records
             </button>
+            <button @click="activeSection = 'educationalAttainment'"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                Educational Attainment
+            </button>
         </div>
         <!-- Personal Data Section (default view) -->
         <div x-show="activeSection === 'personalData'" x-cloak>
@@ -22,6 +26,10 @@
         <!-- Employment Record Section -->
         <div x-show="activeSection === 'employmentRecord'" x-cloak>
             @include('employees.partials.employmentRecord')
+        </div>
+        <!-- Employment Educational Attainment -->
+        <div x-show="activeSection === 'educationalAttainment'" x-cloak>
+            @include('employees.partials.educationalAttainment')
         </div>
     </div>
 </x-app-layout>
