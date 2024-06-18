@@ -36,4 +36,9 @@ class Employee extends Model
     {
         return $this->hasMany(DistinctionRecognition::class);
     }
+    public function groupAffiliations()
+    {
+        return $this->hasMany(GroupAffiliation::class);
+    }
+
 }

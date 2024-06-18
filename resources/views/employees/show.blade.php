@@ -5,7 +5,7 @@
     <div class="mx-auto max-w-5xl" x-data="{ activeSection: '{{ session('activeSection', 'personalData') }}' }">
         <x-auth-validation-errors />
         <x-auth-session-status :status="session()->get('success')" />
-        <div class="mt-4 space-x-2">
+        <div class="mt-4 mr-2">
             <button @click="activeSection = 'personalData'" :class="{ 'underline': activeSection === 'personalData' }">
                 Personal Data
             </button>
@@ -27,6 +27,10 @@
             <button @click="activeSection = 'distinctionRecognition'"
                 :class="{ 'underline': activeSection === 'distinctionRecognition' }">
                 Distinction Recognition
+            </button>
+            <button @click="activeSection = 'groupAffiliation'"
+                :class="{ 'underline': activeSection === 'groupAffiliation' }">
+                Group Affiliation
             </button>
         </div>
 
@@ -53,6 +57,10 @@
         <!-- Seminar or Training Attended -->
         <div x-show="activeSection === 'distinctionRecognition'" x-cloak>
             @include('employees.partials.distinctionRecognition')
+        </div>
+        <!-- Seminar or Training Attended -->
+        <div x-show="activeSection === 'groupAffiliation'" x-cloak>
+            @include('employees.partials.groupAffiliation')
         </div>
     </div>
 </x-app-layout>
