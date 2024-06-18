@@ -5,12 +5,8 @@
             <div>
                 <x-label>Level</x-label>
                 <x-text-input-select name="level">
-                    <option value="" disabled
-                        {{ is_null(optional($employee->personalData)->level) && is_null(old('level')) ? 'selected' : '' }}>
-                        Select Level</option>
                     @foreach (['Grade School', 'Junior High', 'Senior High', 'Vocational', 'Bachelor\'s', 'Master\'s', 'Doctorate'] as $option)
-                        <option value="{{ $option }}"
-                            {{ optional($employee->personalData)->level == $option || old('level') == $option ? 'selected' : '' }}>
+                        <option value="{{ $option }}" {{ old('level') == $option ? 'selected' : '' }}>
                             {{ $option }}
                         </option>
                     @endforeach

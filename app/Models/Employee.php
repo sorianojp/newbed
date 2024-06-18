@@ -28,4 +28,8 @@ class Employee extends Model
     {
         return $this->hasMany(CivilService::class);
     }
+    public function seminarTrainings()
+    {
+        return $this->hasMany(SeminarTraining::class);
+    }
 }

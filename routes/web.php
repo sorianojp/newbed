@@ -8,6 +8,7 @@ use App\Http\Controllers\EmployeePersonalDataController;
 use App\Http\Controllers\EmploymentRecordController;
 use App\Http\Controllers\EducationalAttainmentController;
 use App\Http\Controllers\CivilServiceController;
+use App\Http\Controllers\SeminarTrainingController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TenureshipController;
@@ -27,6 +28,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('employees/{employee}/storeEmploymentRecord', [EmploymentRecordController::class, 'storeEmploymentRecord'])->name('employees.storeEmploymentRecord');
     Route::post('employees/{employee}/storeEducationalAttainment', [EducationalAttainmentController::class, 'storeEducationalAttainment'])->name('employees.storeEducationalAttainment');
     Route::post('employees/{employee}/storeCivilService', [CivilServiceController::class, 'storeCivilService'])->name('employees.storeCivilService');
+    Route::post('employees/{employee}/storeSeminarTraining', [SeminarTrainingController::class, 'storeSeminarTraining'])->name('employees.storeSeminarTraining');
     Route::resource('roles', RoleController::class);
     Route::resource('positions', PositionController::class);
     Route::resource('departments', DepartmentController::class);

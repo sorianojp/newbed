@@ -6,23 +6,26 @@
         <x-auth-validation-errors />
         <x-auth-session-status :status="session()->get('success')" />
         <div class="mt-4 space-x-2">
-            <button @click="activeSection = 'personalData'"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            <button @click="activeSection = 'personalData'" :class="{ 'underline': activeSection === 'personalData' }">
                 Personal Data
             </button>
             <button @click="activeSection = 'employmentRecord'"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                :class="{ 'underline': activeSection === 'employmentRecord' }">
                 Employment Records
             </button>
             <button @click="activeSection = 'educationalAttainment'"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                :class="{ 'underline': activeSection === 'educationalAttainment' }">
                 Educational Attainment
             </button>
-            <button @click="activeSection = 'civilService'"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            <button @click="activeSection = 'civilService'" :class="{ 'underline': activeSection === 'civilService' }">
                 Civil Services
             </button>
+            <button @click="activeSection = 'seminarTraining'"
+                :class="{ 'underline': activeSection === 'seminarTraining' }">
+                Seminar or Trainings Attended
+            </button>
         </div>
+
         <!-- Personal Data Section (default view) -->
         <div x-show="activeSection === 'personalData'" x-cloak>
             @include('employees.partials.personalData')
@@ -38,6 +41,10 @@
         <!-- Civil Service -->
         <div x-show="activeSection === 'civilService'" x-cloak>
             @include('employees.partials.civilService')
+        </div>
+        <!-- Seminar or Training Attended -->
+        <div x-show="activeSection === 'seminarTraining'" x-cloak>
+            @include('employees.partials.seminarTraining')
         </div>
     </div>
 </x-app-layout>
