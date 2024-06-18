@@ -40,5 +40,9 @@ class Employee extends Model
     {
         return $this->hasMany(GroupAffiliation::class);
     }
+    public function jobSkills()
+    {
+        return $this->hasMany(JobSkill::class);
+    }
 
 }

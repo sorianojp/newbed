@@ -32,6 +32,9 @@
                 :class="{ 'underline': activeSection === 'groupAffiliation' }">
                 Group Affiliation
             </button>
+            <button @click="activeSection = 'jobSkill'" :class="{ 'underline': activeSection === 'jobSkill' }">
+                Job Skill
+            </button>
         </div>
 
         <!-- Personal Data Section (default view) -->
@@ -61,6 +64,10 @@
         <!-- Seminar or Training Attended -->
         <div x-show="activeSection === 'groupAffiliation'" x-cloak>
             @include('employees.partials.groupAffiliation')
+        </div>
+        <!-- Seminar or Training Attended -->
+        <div x-show="activeSection === 'jobSkill'" x-cloak>
+            @include('employees.partials.jobSkill')
         </div>
     </div>
 </x-app-layout>

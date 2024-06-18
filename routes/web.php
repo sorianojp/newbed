@@ -11,6 +11,7 @@ use App\Http\Controllers\CivilServiceController;
 use App\Http\Controllers\SeminarTrainingController;
 use App\Http\Controllers\DistinctionRecognitionController;
 use App\Http\Controllers\GroupAffiliationController;
+use App\Http\Controllers\JobSkillController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TenureshipController;
@@ -33,6 +34,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('employees/{employee}/storeSeminarTraining', [SeminarTrainingController::class, 'storeSeminarTraining'])->name('employees.storeSeminarTraining');
     Route::post('employees/{employee}/storeDistinctionRecognition', [DistinctionRecognitionController::class, 'storeDistinctionRecognition'])->name('employees.storeDistinctionRecognition');
     Route::post('employees/{employee}/storeGroupAffiliation', [GroupAffiliationController::class, 'storeGroupAffiliation'])->name('employees.storeGroupAffiliation');
+    Route::post('employees/{employee}/storeJobSkill', [JobSkillController::class, 'storeJobSkill'])->name('employees.storeJobSkill');
     Route::resource('roles', RoleController::class);
     Route::resource('positions', PositionController::class);
     Route::resource('departments', DepartmentController::class);
