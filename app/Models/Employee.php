@@ -32,4 +32,8 @@ class Employee extends Model
     {
         return $this->hasMany(SeminarTraining::class);
     }
+    public function distinctionRecognitions()
+    {
+        return $this->hasMany(DistinctionRecognition::class);
+    }
 }

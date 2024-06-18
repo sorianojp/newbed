@@ -24,6 +24,10 @@
                 :class="{ 'underline': activeSection === 'seminarTraining' }">
                 Seminar or Trainings Attended
             </button>
+            <button @click="activeSection = 'distinctionRecognition'"
+                :class="{ 'underline': activeSection === 'distinctionRecognition' }">
+                Distinction Recognition
+            </button>
         </div>
 
         <!-- Personal Data Section (default view) -->
@@ -45,6 +49,10 @@
         <!-- Seminar or Training Attended -->
         <div x-show="activeSection === 'seminarTraining'" x-cloak>
             @include('employees.partials.seminarTraining')
+        </div>
+        <!-- Seminar or Training Attended -->
+        <div x-show="activeSection === 'distinctionRecognition'" x-cloak>
+            @include('employees.partials.distinctionRecognition')
         </div>
     </div>
 </x-app-layout>
