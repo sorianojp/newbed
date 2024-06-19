@@ -28,7 +28,7 @@
                 <x-text-input-select id="tenureship_id" name="tenureship_id">
                     @foreach ($tenureships as $tenureship)
                         <option value="{{ $tenureship->id }}"
-                            {{ old('tenureship_id') == $position->id ? 'selected' : '' }}>
+                            {{ old('tenureship_id') == $tenureship->id ? 'selected' : '' }}>
                             {{ $tenureship->name }}
                         </option>
                     @endforeach
@@ -38,11 +38,11 @@
         <div class="grid grid-cols-1 gap-2 sm:grid-cols-3 my-2">
             <div>
                 <x-label>Start Date</x-label>
-                <x-text-input type="date" name="start_date" :value="old('start_date')" placeholder="Start Date" />
+                <x-text-input type="date" name="start_date" :value="old('start_date')" />
             </div>
             <div>
                 <x-label>End Date</x-label>
-                <x-text-input type="date" name="end_date" :value="old('end_date')" placeholder="End Date" />
+                <x-text-input type="date" name="end_date" :value="old('end_date')" />
             </div>
             <div>
                 <x-label>Base Salary</x-label>

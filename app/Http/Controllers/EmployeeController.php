@@ -24,7 +24,8 @@ class EmployeeController extends Controller
     }
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        session(['activeSection' => 'employmentRecord']);
+        $validatedData = $request->validate([
             'employee_id_no' => 'required',
             'lastname' => 'required',
             'firstname' => 'required',

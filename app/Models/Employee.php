@@ -33,4 +33,36 @@ class Employee extends Model
     {
         return $this->hasMany(EmploymentRecord::class);
     }
+    public function educationalAttainments()
+    {
+        return $this->hasMany(EducationalAttainment::class);
+    }
+    public function civilServices()
+    {
+        return $this->hasMany(CivilService::class);
+    }
+    public function seminarTrainings()
+    {
+        return $this->hasMany(SeminarTraining::class);
+    }
+    public function distinctionRecognitions()
+    {
+        return $this->hasMany(DistinctionRecognition::class);
+    }
+    public function groupAffiliations()
+    {
+        return $this->hasMany(GroupAffiliation::class);
+    }
+    public function jobSkills()
+    {
+        return $this->hasMany(JobSkill::class);
+    }
+    public function childrenDatas()
+    {
+        return $this->hasMany(ChildrenData::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

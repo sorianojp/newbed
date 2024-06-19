@@ -60,7 +60,7 @@
                     <div>
                         <x-label>Date of Birth</x-label>
                         <x-text-input type="date" name="dob"
-                            value="{{ optional($employee->personalData)->dob }}" placeholder="Date of Birth" />
+                            value="{{ optional($employee->personalData)->dob }}" />
                     </div>
                     <div>
                         <x-label>Gender</x-label>
