@@ -44,5 +44,8 @@ class Employee extends Model
     {
         return $this->hasMany(JobSkill::class);
     }
-
+    public function childrenDatas()
+    {
+        return $this->hasMany(ChildrenData::class);
+    }
 }

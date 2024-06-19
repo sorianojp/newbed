@@ -12,11 +12,11 @@
             </div>
             <div>
                 <x-label>Start Date</x-label>
-                <x-text-input type="date" name="start_date" :value="old('start_date')" placeholder="Start Date" />
+                <x-text-input type="date" name="start_date" :value="old('start_date')" />
             </div>
             <div>
                 <x-label>End Date</x-label>
-                <x-text-input type="date" name="end_date" :value="old('end_date')" placeholder="End Date" />
+                <x-text-input type="date" name="end_date" :value="old('end_date')" />
             </div>
         </div>
         <div class="flex justify-end mt-2">

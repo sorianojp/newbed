@@ -13,7 +13,7 @@
             </div>
             <div>
                 <x-label>Exam Date</x-label>
-                <x-text-input type="date" name="exam_date" :value="old('exam_date')" placeholder="Exam Date" />
+                <x-text-input type="date" name="exam_date" :value="old('exam_date')" />
             </div>
             <div>
                 <x-label>Exam Place</x-label>
@@ -25,7 +25,7 @@
             </div>
             <div>
                 <x-label>Validity Date</x-label>
-                <x-text-input type="date" name="validity_date" :value="old('validity_date')" placeholder="Validity Date" />
+                <x-text-input type="date" name="validity_date" :value="old('validity_date')" />
             </div>
         </div>
         <div class="flex justify-end mt-2">

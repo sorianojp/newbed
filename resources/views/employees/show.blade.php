@@ -35,6 +35,9 @@
             <button @click="activeSection = 'jobSkill'" :class="{ 'underline': activeSection === 'jobSkill' }">
                 Job Skill
             </button>
+            <button @click="activeSection = 'childrenData'" :class="{ 'underline': activeSection === 'childrenData' }">
+                Children Data
+            </button>
         </div>
 
         <!-- Personal Data Section (default view) -->
@@ -68,6 +71,10 @@
         <!-- Seminar or Training Attended -->
         <div x-show="activeSection === 'jobSkill'" x-cloak>
             @include('employees.partials.jobSkill')
+        </div>
+        <!-- Seminar or Training Attended -->
+        <div x-show="activeSection === 'childrenData'" x-cloak>
+            @include('employees.partials.childrenData')
         </div>
     </div>
 </x-app-layout>

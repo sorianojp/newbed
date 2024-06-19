@@ -12,7 +12,7 @@
             </div>
             <div>
                 <x-label>Date</x-label>
-                <x-text-input type="date" name="date" :value="old('date')" placeholder="Date" />
+                <x-text-input type="date" name="date" :value="old('date')" />
             </div>
             <div>
                 <x-label>Granting Agency/Organization</x-label>
