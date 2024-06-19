@@ -5,6 +5,8 @@ use App\Models\Employee;
 use App\Models\Position;
 use App\Models\Tenureship;
 use App\Models\Department;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -22,7 +24,8 @@ class EmployeeController extends Controller
     }
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        session(['activeSection' => 'employmentRecord']);
+        $validatedData = $request->validate([
             'employee_id_no' => 'required',
             'lastname' => 'required',
             'firstname' => 'required',
@@ -33,8 +36,19 @@ class EmployeeController extends Controller
             'company_email' => 'nullable'
 
         ]);
-        Employee::create($request->all());
-        return redirect()->route('employees.index')->with('success','Employee Registered!');
+        $employee = Employee::create($validatedData);
+        if ($validatedData['company_email']) {
+            $user = User::create([
+                'name' => $validatedData['employee_id_no'],
+                'email' => $validatedData['company_email'],
+                'password' => Hash::make($validatedData['employee_id_no']),
+            ]);
+            $user->assignRole('employee');
+            $employee->user_id = $user->id;
+            $employee->save();
+        }
+        return redirect()->route('employees.show', ['employee' => $employee])
+            ->with(['success' => 'Employee Added!'])->with(['note' => 'Please Add Employee\'s Employment Record!']);
     }
     public function show(Employee $employee)
     {

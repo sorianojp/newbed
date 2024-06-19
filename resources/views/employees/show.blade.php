@@ -5,6 +5,7 @@
     <div class="mx-auto max-w-5xl" x-data="{ activeSection: '{{ session('activeSection', 'personalData') }}' }">
         <x-auth-validation-errors />
         <x-auth-session-status :status="session()->get('success')" />
+        <x-auth-session-status-warning :status="session()->get('note')" />
         <div class="mt-4 mr-2">
             <button @click="activeSection = 'personalData'" :class="{ 'underline': activeSection === 'personalData' }">
                 Personal Data

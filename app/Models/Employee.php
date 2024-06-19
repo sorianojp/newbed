@@ -48,4 +48,8 @@ class Employee extends Model
     {
         return $this->hasMany(ChildrenData::class);
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
