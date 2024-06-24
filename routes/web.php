@@ -1,20 +1,25 @@
 <?php
 
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\ChildrenDataController;
+use App\Http\Controllers\CivilServiceController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\DistinctionRecognitionController;
+use App\Http\Controllers\EducationalAttainmentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeePersonalDataController;
 use App\Http\Controllers\EmploymentRecordController;
-use App\Http\Controllers\EducationalAttainmentController;
-use App\Http\Controllers\CivilServiceController;
-use App\Http\Controllers\SeminarTrainingController;
-use App\Http\Controllers\DistinctionRecognitionController;
 use App\Http\Controllers\GroupAffiliationController;
 use App\Http\Controllers\JobSkillController;
-use App\Http\Controllers\ChildrenDataController;
+use App\Http\Controllers\OvertimeController;
+use App\Http\Controllers\OvertimeTypeController;
+use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RegularScheduleController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SeminarTrainingController;
+use App\Http\Controllers\TeachingScheduleController;
 use App\Http\Controllers\TenureshipController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -50,7 +55,22 @@ Route::group(['middleware' => ['auth']], function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::get('/get-attendances', [AttendanceController::class, 'getAttendances']);
     Route::resource('attendances', AttendanceController::class);
+
+    Route::get('/get-regular-schedules', [RegularScheduleController::class, 'getSchedules']);
+    Route::resource('regular-schedules', RegularScheduleController::class)->parameters([
+        'regular-schedules' => 'regularSchedule',
+    ]);
+    Route::get('/get-teaching-schedules', [TeachingScheduleController::class, 'getSchedules']);
+    Route::resource('teaching-schedules', TeachingScheduleController::class)->parameters([
+        'teaching-schedules' => 'teachingSchedule',
+    ]);
+
+    Route::resource('overtime-types', OvertimeTypeController::class);
+    Route::resource('overtimes', OvertimeController::class);
+
+    Route::get('/test-payroll', [PayrollController::class, 'index']);
 });
 
 require __DIR__ . '/auth.php';
