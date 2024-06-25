@@ -22,6 +22,8 @@ use App\Http\Controllers\SeminarTrainingController;
 use App\Http\Controllers\TeachingScheduleController;
 use App\Http\Controllers\TenureshipController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\NoDailyTimeRecordController;
+use App\Http\Controllers\PayrollTypeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -55,6 +57,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+
     Route::get('/get-attendances', [AttendanceController::class, 'getAttendances']);
     Route::resource('attendances', AttendanceController::class);
 
@@ -71,6 +74,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('overtimes', OvertimeController::class);
 
     Route::get('/test-payroll', [PayrollController::class, 'index']);
+
+
+
+
+    Route::resource('no-dtr', NoDailyTimeRecordController::class);
+    Route::resource('payroll-types', PayrollTypeController::class);
 });
 
 require __DIR__ . '/auth.php';
