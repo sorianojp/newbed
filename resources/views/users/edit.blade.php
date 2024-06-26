@@ -38,9 +38,8 @@
                     <x-h6>Roles</x-h6>
                     @foreach ($roles as $value => $label)
                         <div class="flex items-center space-x-2">
-                            <x-text-input-checkbox name="roles[]" value="{{ $value }}" :checked="isset($userRole[$value])"
-                                id="role_{{ $value }}" />
-                            <x-label for="role_{{ $value }}">{{ $value }}</x-label>
+                            <x-text-input-checkbox name="roles[]" value="{{ $value }}" :checked="isset($userRole[$value])" />
+                            <x-label>{{ $value }}</x-label>
                         </div>
                     @endforeach
                 </div>

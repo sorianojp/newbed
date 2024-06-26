@@ -65,4 +65,12 @@ class Employee extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function noDailyTimeRecord()
+    {
+        return $this->hasMany(NoDailyTimeRecord::class);
+    }
+    public function groupings()
+    {
+        return $this->belongsToMany(Grouping::class, 'employee_groupings');
+    }
 }

@@ -31,9 +31,8 @@
                     <x-label>Roles</x-label>
                     @foreach ($roles as $role)
                         <div class="flex items-center space-x-2">
-                            <x-text-input-checkbox name="roles[]" value="{{ $role }}"
-                                id="role_{{ $role }}" />
-                            <x-label for="role_{{ $role }}">{{ $role }}</x-label>
+                            <x-text-input-checkbox name="roles[]" value="{{ $role }}" />
+                            <x-label>{{ $role }}</x-label>
                         </div>
                     @endforeach
                 </div>
