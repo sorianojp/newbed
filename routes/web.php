@@ -68,6 +68,8 @@ Route::group(['middleware' => ['auth']], function () {
     ]);
 
     Route::resource('overtime-types', OvertimeTypeController::class);
+
+    Route::get('/get-overtime', [OvertimeController::class, 'getOvertime']);
     Route::resource('overtimes', OvertimeController::class);
 
     Route::get('/test-payroll', [PayrollController::class, 'index']);

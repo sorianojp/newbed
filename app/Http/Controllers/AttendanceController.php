@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -32,15 +33,62 @@ class AttendanceController extends Controller
     {
         $request->validate([
             'employee_id' => ['required'],
-            'date' => ['required', 'date'],
-            'time' => ['required', 'date_format:H:i'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['nullable', 'date'],
+            'start_time' => ['required', 'date_format:H:i'],
+            'end_time' => ['nullable', 'date_format:H:i'],
         ]);
 
-        $attendance = Attendance::create([
-            'employee_id' => $request->employee_id,
-            'date' => $request->date,
-            'time' => $request->time,
-        ]);
+        $data = [];
+
+        if ($request->filled('end_date')) {
+            $first_date = Carbon::parse($request->start_date);
+            $last_date = Carbon::parse($request->end_date);
+
+            // Create a collection of all dates in the range
+            $dateRange = collect();
+            for ($date = $first_date->copy(); $date->lte($last_date); $date->addDay()) {
+                $dateRange->push($date->copy());
+            }
+
+            foreach ($dateRange as $date) {
+                $data[] = [
+                    'employee_id' => $request->employee_id,
+                    'date' => $date->format('Y-m-d'),
+                    'time' => $request->start_time,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ];
+                if ($request->filled('end_time')) {
+                    $data[] = [
+                        'employee_id' => $request->employee_id,
+                        'date' => $date->format('Y-m-d'),
+                        'time' => $request->end_time,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ];
+                }
+            }
+        } else {
+            $data[] = [
+                'employee_id' => $request->employee_id,
+                'date' => $request->start_date,
+                'time' => $request->start_time,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
+            if ($request->filled('end_time')) {
+                $data[] = [
+                    'employee_id' => $request->employee_id,
+                    'date' => $request->start_date,
+                    'time' => $request->end_time,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ];
+            }
+        }
+
+        Attendance::insert($data);
 
         return response()->json(['message' => 'Attendance added successfully']);
     }
@@ -82,10 +130,28 @@ class AttendanceController extends Controller
     public function getAttendances(Request $request): JsonResponse
     {
         $employee = $request->input('employee_id');
-        $date = $request->input('date');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
 
-        $attendances = Attendance::where('employee_id', $employee)->whereDate('date', $date)->orderBy('time')->get();
+        $attendances = Attendance::where('employee_id', $employee)->where(function ($query) use ($startDate, $endDate) {
+            if ($startDate && $endDate) {
+                $query->whereBetween('date', [$startDate, $endDate]);
+            } elseif ($startDate) {
+                $query->where('date', $startDate);
+            }
+        })->orderBy('date')->orderBy('time')->get();
 
-        return response()->json($attendances);
+        $formattedAttendances = $attendances->groupBy(function ($attendance) {
+            return $attendance->date;
+        })->map(function ($group, $date) {
+            return [
+                'date' => Carbon::parse($date)->format('F j, Y, l'),
+                'attendances' => $group->map(function ($attendance) {
+                    return $attendance;
+                })->toArray(),
+            ];
+        })->values()->toArray();
+
+        return response()->json($formattedAttendances);
     }
 }

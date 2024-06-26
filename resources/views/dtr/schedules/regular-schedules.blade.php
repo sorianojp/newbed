@@ -12,7 +12,7 @@
             <x-card>
                 @include('_partials.search-employees')
                 <div class="mb-2 flex flex-col space-y-0.5">
-
+                    <input type="hidden" x-model="employeeId">
                     <template x-for="(day, i) in days" :key="i">
                         <div>
                             <div x-show="!is_editing" x-cloak>

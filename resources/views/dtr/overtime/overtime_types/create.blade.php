@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        {{ __('Create Tenureship') }}
+        {{ __('Create Overtime Type') }}
     </x-slot>
     <div class="mx-auto max-w-lg">
         <x-auth-validation-errors />

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('overtimes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('overtime_types_id')->constrained();
+            $table->foreignId('overtime_type_id')->constrained();
             $table->date('date');
             $table->time('start_time');
             $table->time('end_time');
