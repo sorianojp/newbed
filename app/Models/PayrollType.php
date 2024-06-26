@@ -12,4 +12,8 @@ class PayrollType extends Model
         'name',
         'description'
     ];
+    public function groupings()
+    {
+        return $this->hasMany(Grouping::class);
+    }
 }
