@@ -9,13 +9,26 @@
                 @csrf
                 @method('PUT')
                 <x-h6>Employees</x-h6>
-                @foreach ($employees as $employee)
-                    <div class="flex items-center space-x-2">
-                        <x-text-input-checkbox name="employees[]" value="{{ $employee->id }}" :checked="$grouping->employees->contains($employee->id)" />
-                        <x-label>{{ $employee->full_name }}</x-label>
+                <div class="space-y-2">
+                    @foreach ($employees as $employee)
+                        <div
+                            class="p-2 border rounded-lg flex items-center space-x-2 {{ $employee->groupings->isNotEmpty() && !$grouping->employees->contains($employee->id) ? 'bg-gray-200' : '' }}">
+                            <x-text-input-checkbox name="employees[]" value="{{ $employee->id }}" :checked="$grouping->employees->contains($employee->id)"
+                                :disabled="$employee->groupings->isNotEmpty() &&
+                                    !$grouping->employees->contains($employee->id)" />
+                            <x-label>
+                                {{ $employee->full_name }}
+                                @if ($employee->groupings->isNotEmpty() && !$grouping->employees->contains($employee->id))
+                                    (Group:
+                                    {{ $employee->groupings->first()->name }})
+                                @endif
+                            </x-label>
+                        </div>
+                    @endforeach
+                    <div class="flex justify-end">
+                        <x-primary-button>Save</x-primary-button>
                     </div>
-                @endforeach
-                <x-primary-button>Save</x-primary-button>
+                </div>
             </form>
         </x-card>
     </div>

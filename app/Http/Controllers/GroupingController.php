@@ -33,7 +33,7 @@ class GroupingController extends Controller
     public function show($id)
     {
         $grouping = Grouping::findOrFail($id);
-        $employees = Employee::all();
+        $employees = Employee::with('groupings')->get();
         return view('groupings.show', compact('grouping', 'employees'));
     }
     public function addEmployees(Request $request, $id)
