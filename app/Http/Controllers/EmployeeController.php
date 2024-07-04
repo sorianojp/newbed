@@ -6,6 +6,8 @@ use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Position;
 use App\Models\Tenureship;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,11 +34,21 @@ class EmployeeController extends Controller
             'middlename' => 'nullable',
             'name_ext' => 'nullable',
             'mobile_no' => 'required',
-            'personal_email' => 'nullable',
+            'personal_email' => 'required',
             'company_email' => 'nullable',
 
         ]);
-        Employee::create($request->all());
+        $employee = Employee::create($validatedData);
+        if ($validatedData['personal_email']) {
+            $user = User::create([
+                'name' => $validatedData['employee_id_no'],
+                'email' => $validatedData['personal_email'],
+                'password' => Hash::make($validatedData['employee_id_no']),
+            ]);
+            $user->assignRole('employee');
+            $employee->user_id = $user->id;
+            $employee->save();
+        }
         return redirect()->route('employees.index')->with('success', 'Employee Registered!');
     }
     public function show(Employee $employee)

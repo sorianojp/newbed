@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('middlename')->nullable();
             $table->string('name_ext')->nullable();
             $table->string('mobile_no');
-            $table->string('personal_email')->nullable();
+            $table->string('personal_email');
             $table->string('company_email')->nullable();
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
