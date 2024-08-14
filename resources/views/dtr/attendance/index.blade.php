@@ -25,7 +25,6 @@
                 </div>
                 <div class="mb-2 grid grid-cols-2 gap-2">
                     <div>
-
                         <x-label>Start Time</x-label>
                         <x-text-input type="time" name="start_time" x-model="start_time" />
                     </div>
@@ -64,7 +63,7 @@
                                                 </td>
                                                 <td class="px-2 py-1 text-center">
                                                     <x-secondary-button
-                                                        @click="deleteAttendance(a.id)">Delete</x-secondary-button>
+                                                        @click="deleteAttendance(attendance.id)">Delete</x-secondary-button>
                                                 </td>
                                             </tr>
                                         </template>

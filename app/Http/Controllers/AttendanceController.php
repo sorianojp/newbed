@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use App\Models\TeachingAttendance;
+use App\Models\TeachingSchedule;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -127,6 +129,21 @@ class AttendanceController extends Controller
         return response()->json(['message' => 'Attendance deleted successfully']);
     }
 
+    public function checkerReport(): View
+    {
+        return view('dtr.attendance.checker');
+    }
+
+    public function checkerReportStore(Request $request): JsonResponse
+    {
+        $attendance = TeachingAttendance::updateOrCreate(
+            ['teaching_schedule_id' => $request->teaching_schedule_id, 'date' => $request->date],
+            ['status' => $request->status]
+        );
+
+        return response()->json(['attendance' => $attendance]);
+    }
+
     public function getAttendances(Request $request): JsonResponse
     {
         $employee = $request->input('employee_id');
@@ -154,4 +171,32 @@ class AttendanceController extends Controller
 
         return response()->json($formattedAttendances);
     }
+
+    public function getSchedules(Request $request): JsonResponse
+    {
+
+        $employee = $request->employee_id;
+        $date = Carbon::parse($request->date);
+
+        $attendances = Attendance::where('employee_id', $employee)->where(function ($query) use ($date) {
+            $query->whereDate('date', $date->format('Y-m-d'));
+        })->orderBy('time')->get();
+
+        $schedules = TeachingSchedule::with([
+            'teachingAttendances' => function ($query) use ($date) {
+                $query->whereDate('date', $date->format('Y-m-d'))->limit(1);
+            }]
+        )->where('employee_id', $employee)
+            ->where('start_date', '<=', $date->format('Y-m-d'))
+            ->where('end_date', '>=', $date->format('Y-m-d'))
+            ->where('day_of_week', $date->format('l'))
+            ->orderBy('start_time')
+            ->get();
+
+        return response()->json([
+            'attendances' => $attendances,
+            'schedules' => $schedules,
+        ]);
+    }
+
 }

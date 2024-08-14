@@ -7,10 +7,10 @@ use App\Models\Employee;
 use App\Models\Position;
 use App\Models\Tenureship;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class EmployeeController extends Controller
@@ -39,6 +39,8 @@ class EmployeeController extends Controller
 
         ]);
         $employee = Employee::create($validatedData);
+        $employee->employeeSetting()->create();
+
         if ($validatedData['personal_email']) {
             $user = User::create([
                 'name' => $validatedData['employee_id_no'],

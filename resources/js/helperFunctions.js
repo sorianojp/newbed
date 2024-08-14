@@ -23,3 +23,10 @@ window.convertTime = function (time24) {
 
     return strTime;
 }
+
+window.formatNumber = function (num) {
+    return num.toLocaleString('en-PH', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}

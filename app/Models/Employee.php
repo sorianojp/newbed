@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Employee extends Model
 {
@@ -23,6 +26,26 @@ class Employee extends Model
         return Attribute::make(
             get: fn() => "{$this->lastname}, {$this->firstname} {$this->middlename} - {$this->employee_id_no}"
         );
+    }
+
+    public function overtimes(): BelongsToMany
+    {
+        return $this->belongsToMany(Overtime::class);
+    }
+
+    public function employeeSetting(): HasOne
+    {
+        return $this->hasOne(EmployeeSetting::class);
+    }
+
+    public function additionals(): HasMany
+    {
+        return $this->hasMany(EmployeeAdditional::class);
+    }
+
+    public function deductions(): HasMany
+    {
+        return $this->hasMany(EmployeeDeduction::class);
     }
 
     public function personalData()

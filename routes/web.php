@@ -1,30 +1,41 @@
 <?php
 
+use App\Http\Controllers\AdditionalController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ChildrenDataController;
 use App\Http\Controllers\CivilServiceController;
+use App\Http\Controllers\ContributionSettingController;
+use App\Http\Controllers\DeductionController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DistinctionRecognitionController;
 use App\Http\Controllers\EducationalAttainmentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeePersonalDataController;
+use App\Http\Controllers\EmployeeSettingController;
 use App\Http\Controllers\EmploymentRecordController;
 use App\Http\Controllers\GroupAffiliationController;
+use App\Http\Controllers\GroupingController;
 use App\Http\Controllers\JobSkillController;
+use App\Http\Controllers\NoDailyTimeRecordController;
 use App\Http\Controllers\OvertimeController;
 use App\Http\Controllers\OvertimeTypeController;
+use App\Http\Controllers\PagibigController;
 use App\Http\Controllers\PayrollController;
+use App\Http\Controllers\PayrollScheduleController;
+use App\Http\Controllers\PayrollTypeController;
+use App\Http\Controllers\PhilhealthController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegularScheduleController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SeminarTrainingController;
+use App\Http\Controllers\SSSBracketController;
+use App\Http\Controllers\SSSController;
+use App\Http\Controllers\TaxBracketController;
+use App\Http\Controllers\TaxController;
 use App\Http\Controllers\TeachingScheduleController;
 use App\Http\Controllers\TenureshipController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\NoDailyTimeRecordController;
-use App\Http\Controllers\PayrollTypeController;
-use App\Http\Controllers\GroupingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -58,8 +69,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-
     Route::get('/get-attendances', [AttendanceController::class, 'getAttendances']);
+    Route::get('/get-schedules', [AttendanceController::class, 'getSchedules']);
+    Route::get('/checker-attendance', [AttendanceController::class, 'checkerReport'])->name('attendances.checker');
+    Route::post('/checker-attendance', [AttendanceController::class, 'checkerReportStore'])->name('checker.store');
     Route::resource('attendances', AttendanceController::class);
 
     Route::get('/get-regular-schedules', [RegularScheduleController::class, 'getSchedules']);
@@ -76,10 +89,46 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/get-overtime', [OvertimeController::class, 'getOvertime']);
     Route::resource('overtimes', OvertimeController::class);
 
-    Route::get('/test-payroll', [PayrollController::class, 'index']);
+    Route::prefix('/payroll')->group(function () {
+        Route::get('/schedules/get', [PayrollScheduleController::class, 'getSchedules']);
+        Route::get('/additionals/get', [AdditionalController::class, 'getAdditionals']);
+        Route::get('/deductions/get', [DeductionController::class, 'getDeductions']);
+        Route::get('/settings/get-employee-settings', [EmployeeSettingController::class, 'getEmployeeConfig']);
 
+        Route::resource('schedules', PayrollScheduleController::class)->parameters([
+            'schedules' => 'payrollSchedule',
+        ]);
 
+        Route::get('/additionals/employee', [AdditionalController::class, 'indexEmployee'])->name('additional.employee');
+        Route::post('/additionals/employee', [AdditionalController::class, 'storeEmployee'])->name('additional.employee.store');
+        Route::get('/deductions/employee', [DeductionController::class, 'indexEmployee'])->name('deduction.employee');
+        Route::post('/deductions/employee', [DeductionController::class, 'storeEmployee'])->name('deduction.employee.store');
+        Route::resource('additionals', AdditionalController::class);
+        Route::resource('deductions', DeductionController::class);
 
+        Route::get('/individual', [PayrollController::class, 'showIndividual'])->name('computations.individual');
+        Route::get('/individual/computations', [PayrollController::class, 'computePayroll']);
+        Route::post('/individual/create-payslip', [PayrollController::class, 'createPayslip']);
+
+        Route::get('/employee-settings', [EmployeeSettingController::class, 'index'])->name('employee.settings');
+        Route::put('/employee-settings', [EmployeeSettingController::class, 'store'])->name('employee.settings.store');
+
+        Route::resource('taxes', TaxController::class);
+        Route::resource('taxes.tax-brackets', TaxBracketController::class)->parameters([
+            'tax-brackets' => 'taxBracket',
+        ])->shallow();
+        Route::resource('sss', SSSController::class);
+        Route::resource('sss.sss-brackets', SSSBracketController::class)->parameters([
+            'sss-brackets' => 'sssBracket',
+        ])->shallow();
+
+        Route::resource('pagibig', PagibigController::class);
+        Route::resource('philhealth', PhilhealthController::class);
+
+        Route::resource('contribution-settings', ContributionSettingController::class)->parameters([
+            'contribution-settings' => 'contributionSetting',
+        ]);
+    });
 
     Route::resource('no-dtr', NoDailyTimeRecordController::class);
     Route::resource('payroll-types', PayrollTypeController::class);
