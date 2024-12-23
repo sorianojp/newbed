@@ -6,16 +6,16 @@
         {{ __('Attendances') }}
     </x-slot>
 
-    <div class="mx-auto max-w-xl" x-data="employees">
+    <div class="mx-auto max-w-7xl" x-data="employees">
         <x-auth-session-status :status="session()->get('success')" />
-        <div class="my-2 overflow-x-auto sm:rounded-lg" x-data="attendances">
+        <div class="my-2 grid grid-cols-2 gap-4 overflow-x-auto sm:rounded-lg" x-data="attendances">
             <x-card>
                 @include('_partials.search-employees')
 
                 <div class="mb-2 grid grid-cols-2 gap-2">
 
                     <div>
-                        <x-label>Start Date</x-label>
+                        <x-label>Date</x-label>
                         <x-text-input type="date" name="start_date" x-model="start_date" />
                     </div>
                     <div>
@@ -25,7 +25,7 @@
                 </div>
                 <div class="mb-2 grid grid-cols-2 gap-2">
                     <div>
-                        <x-label>Start Time</x-label>
+                        <x-label>Time</x-label>
                         <x-text-input type="time" name="start_time" x-model="start_time" />
                     </div>
                     <div>
@@ -33,6 +33,19 @@
                         <x-label>End Time (optional)</x-label>
                         <x-text-input type="time" name="end_time" x-model="end_time" />
                     </div>
+                </div>
+                <div class="mb-2 flex flex-col space-y-0.5">
+                    <template x-for="(day, i) in days" :key="i">
+                        <label class="inline-flex cursor-pointer items-center">
+                            <input type="checkbox" :value="day" name="days[]" x-model="selected_days"
+                                class="peer sr-only">
+                            <div
+                                class="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rtl:peer-checked:after:-translate-x-full dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800">
+                            </div>
+                            <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                x-text="day"></span>
+                        </label>
+                    </template>
                 </div>
                 <div class="flex justify-end">
                     <x-primary-button @click="saveAttendance()">Save</x-primary-button>
@@ -42,7 +55,7 @@
                 </template>
             </x-card>
 
-            <div class="mt-5" x-show="attendances.length > 0" x-cloak>
+            <div x-show="attendances.length > 0" x-cloak>
                 <div class="max-h-80 space-y-2 overflow-y-auto">
                     <template x-for="(a,i) in attendances">
                         <x-card>
@@ -83,6 +96,8 @@
 <script>
     function attendances() {
         return {
+            days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+            selected_days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
             start_date: '',
             end_date: '',
             start_time: '',
@@ -124,7 +139,8 @@
                     start_date: this.start_date,
                     end_date: this.end_date,
                     start_time: this.start_time,
-                    end_time: this.end_time
+                    end_time: this.end_time,
+                    days: this.selected_days,
                 }).then(response => {
                     console.log(response.data)
                     this.getAttendances()

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Attendance;
 use App\Models\TeachingAttendance;
 use App\Models\TeachingSchedule;
+use App\Services\AttendanceService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,6 +13,14 @@ use Illuminate\View\View;
 
 class AttendanceController extends Controller
 {
+
+    public $attendanceServices;
+
+    public function __construct(AttendanceService $attendanceServices)
+    {
+        $this->attendanceServices = $attendanceServices;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -33,12 +42,14 @@ class AttendanceController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+
         $request->validate([
             'employee_id' => ['required'],
             'start_date' => ['required', 'date'],
             'end_date' => ['nullable', 'date'],
             'start_time' => ['required', 'date_format:H:i'],
             'end_time' => ['nullable', 'date_format:H:i'],
+            'days' => ['required', 'array'],
         ]);
 
         $data = [];
@@ -50,7 +61,9 @@ class AttendanceController extends Controller
             // Create a collection of all dates in the range
             $dateRange = collect();
             for ($date = $first_date->copy(); $date->lte($last_date); $date->addDay()) {
-                $dateRange->push($date->copy());
+                if (in_array($date->format('l'), $request->days)) {
+                    $dateRange->push($date->copy());
+                }
             }
 
             foreach ($dateRange as $date) {
@@ -150,26 +163,9 @@ class AttendanceController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
 
-        $attendances = Attendance::where('employee_id', $employee)->where(function ($query) use ($startDate, $endDate) {
-            if ($startDate && $endDate) {
-                $query->whereBetween('date', [$startDate, $endDate]);
-            } elseif ($startDate) {
-                $query->where('date', $startDate);
-            }
-        })->orderBy('date')->orderBy('time')->get();
+        $formattedAttendances = $this->attendanceServices->getAttendances($employee, $startDate, $endDate);
 
-        $formattedAttendances = $attendances->groupBy(function ($attendance) {
-            return $attendance->date;
-        })->map(function ($group, $date) {
-            return [
-                'date' => Carbon::parse($date)->format('F j, Y, l'),
-                'attendances' => $group->map(function ($attendance) {
-                    return $attendance;
-                })->toArray(),
-            ];
-        })->values()->toArray();
-
-        return response()->json($formattedAttendances);
+        return response()->json($formattedAttendances->values()->toArray());
     }
 
     public function getSchedules(Request $request): JsonResponse

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,6 +23,10 @@ class TeachingSchedule extends Model
         'weight',
     ];
 
+    protected $appends = [
+        'effective_date',
+    ];
+
     public function employee(): BelongsTo
     {
         return $this->belongsTo(Employee::class);
@@ -29,5 +35,15 @@ class TeachingSchedule extends Model
     public function teachingAttendances(): HasMany
     {
         return $this->hasMany(TeachingAttendance::class);
+    }
+
+    public function effectiveDate(): Attribute
+    {
+        $start = Carbon::parse($this->start_date)->format('m/d/Y');
+        $end = Carbon::parse($this->end_date)->format('m/d/Y');
+
+        return Attribute::make(
+            get: fn() => "{$start} to {$end}",
+        );
     }
 }

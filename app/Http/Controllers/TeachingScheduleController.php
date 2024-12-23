@@ -3,12 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\TeachingSchedule;
+use App\Services\ScheduleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class TeachingScheduleController extends Controller
 {
+    public $scheduleService;
+
+    public function __construct(ScheduleService $scheduleService)
+    {
+        $this->scheduleService = $scheduleService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -111,52 +118,8 @@ class TeachingScheduleController extends Controller
     {
         $employee = $request->input('employee_id');
 
-        // Custom ordering for days of the week
-        $dayOfWeekOrder = "CASE
-                                WHEN day_of_week = 'Monday' THEN 1
-                                WHEN day_of_week = 'Tuesday' THEN 2
-                                WHEN day_of_week = 'Wednesday' THEN 3
-                                WHEN day_of_week = 'Thursday' THEN 4
-                                WHEN day_of_week = 'Friday' THEN 5
-                                WHEN day_of_week = 'Saturday' THEN 6
-                                WHEN day_of_week = 'Sunday' THEN 7
-                                END";
-
-        $schedules = TeachingSchedule::select('id', 'employee_id', 'day_of_week', 'start_time', 'end_time', 'start_date', 'end_date', 'weight',
-            DB::raw('ROUND(TIMESTAMPDIFF(MINUTE, start_time, end_time) / 60, 2) AS hours'),
-            DB::raw('ROUND(TIMESTAMPDIFF(MINUTE, start_time, end_time) / 60 * weight, 2) AS weighted_hours'),
-            DB::raw('CONCAT(DATE_FORMAT(start_time, "%h:%i%p"), " - ", DATE_FORMAT(end_time, "%h:%i%p")) AS time_range'))
-            ->where('employee_id', $employee)
-            ->orderByRaw($dayOfWeekOrder)
-            ->orderBy('start_time')
-            ->get();
-
-        // Calculate total hours per day
-        $totalHoursPerDay = $schedules->groupBy('day_of_week')->map(function ($daySchedules) {
-            return number_format($daySchedules->sum('weighted_hours'), 2);
-
-        });
-
-        // Default array for all days of the week with 0 hours
-        $defaultHoursPerDay = collect([
-            'Monday' => 0.00,
-            'Tuesday' => 0.00,
-            'Wednesday' => 0.00,
-            'Thursday' => 0.00,
-            'Friday' => 0.00,
-            'Saturday' => 0.00,
-            'Sunday' => 0.00,
-        ]);
-
-        // Merge the calculated hours with the default array
-        $totalHoursPerDay = $defaultHoursPerDay->merge($totalHoursPerDay);
-        $totalHours = number_format($totalHoursPerDay->sum(), 2);
-
-        return response()->json([
-            'schedules' => $schedules,
-            'total_hours_per_day' => $totalHoursPerDay,
-            'total_hours' => $totalHours,
-
-        ]);
+        return response()->json(
+            $this->scheduleService->getTeachingSchedules($employee),
+        );
     }
 }

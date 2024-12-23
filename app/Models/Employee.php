@@ -18,13 +18,20 @@ class Employee extends Model
     ];
 
     protected $appends = [
-        'full_name',
+        'full_name', 'full_name_only',
     ];
 
     public function fullName(): Attribute
     {
         return Attribute::make(
             get: fn() => "{$this->lastname}, {$this->firstname} {$this->middlename} - {$this->employee_id_no}"
+        );
+    }
+
+    public function fullNameOnly(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => "{$this->lastname}, {$this->firstname} {$this->middlename}"
         );
     }
 

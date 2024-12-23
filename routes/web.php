@@ -28,6 +28,7 @@ use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegularScheduleController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SeminarTrainingController;
 use App\Http\Controllers\SSSBracketController;
 use App\Http\Controllers\SSSController;
@@ -47,6 +48,8 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('/pay-test', [PayrollController::class, 'calcPay']);
+
     Route::get('/search-employees', [EmployeeController::class, 'searchEmployees']);
     Route::resource('employees', EmployeeController::class);
     Route::post('employees/{employee}/storePersonalData', [EmployeePersonalDataController::class, 'storePersonalData'])->name('employees.storePersonalData');
@@ -75,6 +78,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/checker-attendance', [AttendanceController::class, 'checkerReportStore'])->name('checker.store');
     Route::resource('attendances', AttendanceController::class);
 
+    //DTR
+    Route::get('/dtr/get-working-schedules', [ScheduleController::class, 'getWorkingSchedules']);
+    Route::get('/dtr/schedules', [ScheduleController::class, 'index'])->name('dtr.schedules.index');
     Route::get('/get-regular-schedules', [RegularScheduleController::class, 'getSchedules']);
     Route::resource('regular-schedules', RegularScheduleController::class)->parameters([
         'regular-schedules' => 'regularSchedule',

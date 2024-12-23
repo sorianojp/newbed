@@ -3,7 +3,7 @@
     <x-slot name="header">Payroll</x-slot>
 
     <div x-data="employees">
-        <div class="mx-auto max-w-7xl" x-data="payrollSchedules">
+        <div class="relative mx-auto max-w-7xl" x-data="payrollSchedules">
             <div class="mx-auto max-w-lg">
                 <x-card>
                     @include('_partials.search-employees')
@@ -14,7 +14,8 @@
                                 <x-label>Month</x-label>
                                 <x-text-input-select name="month" x-model="month">
                                     @foreach ($months as $month)
-                                        <option value="{{ $month }}">{{ $month }}</option>
+                                        <option value="{{ $month }}">
+                                            {{ $month }}</option>
                                     @endforeach
                                 </x-text-input-select>
                             </div>
@@ -67,8 +68,11 @@
                     </div>
 
                     <div>
-                        <x-primary-button>View DTR</x-primary-button>
-                        <x-primary-button>View Working Time</x-primary-button>
+                        <x-primary-button class="bg-green-500 p-1 text-xs hover:bg-green-300"
+                            @click="openViewDtrModal()">View DTR</x-primary-button>
+                        <x-primary-button class="bg-teal-500 p-1 text-xs hover:bg-teal-300"
+                            @click="openWorkingDtrModal()">View Working
+                            Time</x-primary-button>
                     </div>
 
                     <div class="grid grid-cols-4 gap-4 text-sm">
@@ -213,6 +217,9 @@
                 </div>
 
             </template>
+            @include('payroll.computations._partials.working-dtr')
+            @include('payroll.computations._partials.view-dtr')
+            {{-- @include('payroll.computations._partials.sample') --}}
         </div>
     </div>
 
@@ -222,15 +229,28 @@
 <script>
     function payrollSchedules() {
         return {
-            month: 'January',
-            year: new Date().getFullYear(),
+            month: '',
+            year: '',
             schedules: [],
             schedule_id: '',
             schedule: null,
             selectedEmployee: null,
             salary: null,
             show_results: false,
+            open_working_dtr_modal: false,
+            open_view_dtr_modal: false,
+            working_schedules: [],
+            total_hours_per_day: [],
+            total_hours: 0,
+            attendances: [],
             init() {
+                const date = new Date();
+
+                this.year = date.getFullYear();
+                this.month = date.toLocaleString('default', {
+                    month: 'long'
+                });
+
                 this.$watch('employee', value => {
                     this.getSchedules();
                 })
@@ -280,7 +300,7 @@
                         this.salary = res.data.compensations
                         this.show_results = true
                     })
-                    .catch(err => {
+                    .catch(error => {
                         if (error.response) {
                             // The request was made and the server responded with a status code
                             // that falls out of the range of 2xx
@@ -298,6 +318,71 @@
                         }
                         console.log(error.config);
                     })
+            },
+            openWorkingDtrModal() {
+
+                axios.get('/dtr/get-working-schedules', {
+                    params: {
+                        employee_id: this.employee.id,
+                        schedule_id: this.schedule.id,
+                    },
+                    validateStatus: function(status) {
+                        return status >= 200; // default
+                    },
+                }).then(res => {
+                    console.log(res.data);
+                    this.open_working_dtr_modal = true;
+                    this.working_schedules = res.data.schedules
+                    this.total_hours_per_day = res.data.total_hours_per_day
+                    this.total_hours = res.data.total_hours
+                }).catch(error => {
+                    if (error.response) {
+                        // The request was made and the server responded with a status code
+                        // that falls out of the range of 2xx
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    } else if (error.request) {
+                        // The request was made but no response was received
+                        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                        // http.ClientRequest in node.js
+                        console.log(error.request);
+                    } else {
+                        // Something happened in setting up the request that triggered an Error
+                        console.log('Error', error.message);
+                    }
+                    console.log(error.config);
+                })
+            },
+            openViewDtrModal() {
+                axios.get('/get-attendances', {
+                    params: {
+                        employee_id: this.employee.id,
+                        start_date: this.schedule.cutoff_start_date,
+                        end_date: this.schedule.cutoff_end_date,
+                    }
+                }).then(res => {
+                    console.log(res.data)
+                    this.attendances = res.data
+                    this.open_view_dtr_modal = true
+                }).catch(error => {
+                    if (error.response) {
+                        // The request was made and the server responded with a status code
+                        // that falls out of the range of 2xx
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    } else if (error.request) {
+                        // The request was made but no response was received
+                        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                        // http.ClientRequest in node.js
+                        console.log(error.request);
+                    } else {
+                        // Something happened in setting up the request that triggered an Error
+                        console.log('Error', error.message);
+                    }
+                    console.log(error.config);
+                })
             },
             createPayslip() {
                 const formData = new FormData()

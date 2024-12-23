@@ -100,7 +100,7 @@
                     <span class="ms-3">{{ __('Tenureship') }}</span>
                 </x-nav-link>
             </li>
-            <li x-data="{ open: {{ in_array(request()->route()->getName(), ['regular-schedules.index', 'teaching-schedules.index']) ? 'true' : 'false' }} }">
+            <li x-data="{ open: {{ in_array(request()->route()->getName(), ['dtr.schedules.index', 'regular-schedules.index', 'teaching-schedules.index']) ? 'true' : 'false' }} }">
                 <button @click="open = !open"
                     class="group flex w-full items-center rounded-lg p-2 text-base text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -111,7 +111,7 @@
                             d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z"
                             clip-rule="evenodd" />
                     </svg>
-                    <span class="ms-3 flex-1 whitespace-nowrap text-left">{{ __('Schedule') }}</span>
+                    <span class="ms-3 flex-1 whitespace-nowrap text-left">{{ __('DTR') }}</span>
                     <svg x-show="!open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" class="ml-2 h-4 w-4">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -122,6 +122,11 @@
                     </svg>
                 </button>
                 <ul x-show="open" x-collapse class="mt-1 space-y-1 pl-5">
+                    <li>
+                        <x-nav-link :href="route('dtr.schedules.index')" :active="request()->routeIs('dtr.schedules.index')">
+                            <span>{{ __('Schedules') }}</span>
+                        </x-nav-link>
+                    </li>
                     <li>
                         <x-nav-link :href="route('regular-schedules.index')" :active="request()->routeIs('regular-schedules.index')">
                             <span>{{ __('Regular Schedule') }}</span>
